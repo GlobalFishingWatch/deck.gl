@@ -17,16 +17,41 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-/* eslint-disable max-len */
 
-export {default as GreatCircleLayer} from './great-circle-layer/great-circle-layer';
-export {default as S2Layer} from './s2-layer/s2-layer';
-export {default as TileLayer} from './tile-layer/tile-layer';
-export {default as TripsLayer} from './trips-layer/trips-layer';
-export {default as H3ClusterLayer} from './h3-layers/h3-cluster-layer';
-export {default as H3HexagonLayer} from './h3-layers/h3-hexagon-layer';
-export {default as Tile3DLayer} from './tile-3d-layer/tile-3d-layer';
-export {default as TerrainLayer} from './terrain-layer/terrain-layer';
-export {default as MVTLayer} from './mvt-layer/mvt-layer';
-export {default as TemporalGridLayer} from './temporalgrid-layer/temporalgrid-layer';
-export {default as AnimatedGridCellLayer} from './temporalgrid-layer/animated-grid-cell-layer';
+export default `\
+#define SHADER_NAME scatterplot-layer-fragment-shader
+
+precision highp float;
+
+uniform bool filled;
+uniform float stroked;
+uniform bool antialiasing;
+
+varying vec4 vFillColor;
+varying vec4 vLineColor;
+varying vec2 unitPosition;
+varying float innerUnitRadius;
+varying float outerRadiusPixels;
+
+void main(void) {
+  geometry.uv = unitPosition;
+
+  float distToCenter = length(unitPosition) * outerRadiusPixels;
+  float inCircle = antialiasing ? 
+    smoothedge(distToCenter, outerRadiusPixels) : 
+    step(distToCenter, outerRadiusPixels);
+
+  if (inCircle == 0.0) {
+    discard;
+  }
+
+  if (filled) {
+    gl_FragColor = vFillColor;
+  } else {
+    discard;
+  }
+
+  gl_FragColor.a *= inCircle;
+  DECKGL_FILTER_COLOR(gl_FragColor, geometry);
+}
+`;
