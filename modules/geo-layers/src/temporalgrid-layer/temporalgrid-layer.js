@@ -2,6 +2,7 @@
 import { GeoJsonLayer } from '@deck.gl/layers/';
 import TileLayer from '../tile-layer/tile-layer'
 import {getURLFromTemplate} from '../tile-layer/utils';
+import { getFeatures } from './get-features';
 import {TemporalGridLoader} from './temporalgrid-loader';
 
 
@@ -10,47 +11,10 @@ const defaultProps = {
   // binary: true
 };
 
-const DUMMY = {
-  "type": "FeatureCollection",
-  "features": [
-    {
-      "type": "Feature",
-      "properties": {},
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              1.0986328125,
-              47.264320080254805
-            ],
-            [
-              1.69189453125,
-              47.264320080254805
-            ],
-            [
-              1.69189453125,
-              47.754097979680026
-            ],
-            [
-              1.0986328125,
-              47.754097979680026
-            ],
-            [
-              1.0986328125,
-              47.264320080254805
-            ]
-          ]
-        ]
-      }
-    }
-  ]
-}
-
 export default class TemporalGridLayer extends TileLayer {
 
   getTileData(tile) {
-    const {data, getTileData, fetch} = this.props;
+    const {data, fetch} = this.props;
     const {signal} = tile;
 
     tile.url = getURLFromTemplate(data, tile);
@@ -63,17 +27,24 @@ export default class TemporalGridLayer extends TileLayer {
 
   renderSubLayers(props) {
     const {
+      x, y, z,
       bbox: {west, south, east, north}
     } = props.tile;
-    console.log(props)
+    
+    const features = getFeatures(props.data, { tileBBox: [west, south, east, north] })
+    console.log(features)
+
     return new GeoJsonLayer(
       props,
       this.getSubLayerProps({
         id: `temporalgrid-geojson`,
-        data: DUMMY,
+        data: {
+          "type": "FeatureCollection",
+          features
+        },
         // getLineColor: [255, 0, 0],
         getFillColor: [0, 0, 255],
-        // upd4ateTriggers
+        // updateTriggers
       })
     );
 

@@ -1,4 +1,5 @@
 import Protobuf from "pbf";
+import { getCells } from "./get-cells";
 
 const decodeProto = data => {
   const readField = function(tag, obj, pbf) {
@@ -13,12 +14,13 @@ const decodeProto = data => {
 };
 
 const parseTemporalgrid = (arraybuffer, options) => {
+  console.log(options)
   const int16ArrayBuffer = decodeProto(arraybuffer);
-  console.log(int16ArrayBuffer)
-  return 'plop'
+  const cells = getCells(int16ArrayBuffer, /* TODO */ 1)
+  return cells
 }
 
-export const MVTWorkerLoader /* : Loader*/ = {
+export const TemporalGridWorkerLoader /* : Loader*/ = {
   name: 'Temporl Grid',
   id: 'temporalgrid',
   module: 'temporalgrid',
@@ -44,7 +46,7 @@ export const MVTWorkerLoader /* : Loader*/ = {
 };
 
 export const TemporalGridLoader /* : LoaderWithParser*/ = {
-  ...MVTWorkerLoader,
+  ...TemporalGridWorkerLoader,
   parse: async (arrayBuffer, options) => parseTemporalgrid(arrayBuffer, options),
   parseSync: parseTemporalgrid,
   binary: true
