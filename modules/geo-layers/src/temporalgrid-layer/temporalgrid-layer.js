@@ -4,7 +4,7 @@ import TileLayer from '../tile-layer/tile-layer'
 import {getURLFromTemplate} from '../tile-layer/utils';
 import { getFeatures } from './get-features';
 import {TemporalGridLoader} from './temporalgrid-loader';
-
+import AnimatedGridCellLayer from './animated-grid-cell-layer';
 
 const defaultProps = {
   loaders: [TemporalGridLoader],
@@ -34,19 +34,33 @@ export default class TemporalGridLayer extends TileLayer {
     const features = getFeatures(props.data, { tileBBox: [west, south, east, north] })
     console.log(features)
 
-    return new GeoJsonLayer(
-      props,
-      this.getSubLayerProps({
-        id: `temporalgrid-geojson`,
-        data: {
-          "type": "FeatureCollection",
-          features
-        },
-        // getLineColor: [255, 0, 0],
-        getFillColor: [0, 0, 255],
-        // updateTriggers
-      })
-    );
+    return new AnimatedGridCellLayer({
+      id: 'scatterplot-layer',
+      data: features,
+      pickable: true,
+      filled: true,
+      radiusScale: 5,
+      // radiusMinPixels: 1,
+      // radiusMaxPixels: 100,
+      getPosition: d => d.geometry.coordinates[0][0],
+      getRadius: d => 2000,
+      getFillColor: d => d.properties.color,
+      getLineColor: d => [0, 0, 0]
+    })
+
+    // return new GeoJsonLayer(
+    //   props,
+    //   this.getSubLayerProps({
+    //     id: `temporalgrid-geojson`,
+    //     data: {
+    //       "type": "FeatureCollection",
+    //       features
+    //     },
+    //     // getLineColor: [255, 0, 0],
+    //     getFillColor: [0, 0, 255],
+    //     // updateTriggers
+    //   })
+    // );
 
     // return new BitmapLayer(props, {
     //   data: null,

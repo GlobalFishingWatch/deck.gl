@@ -29,3 +29,4 @@ export {default as Tile3DLayer} from './tile-3d-layer/tile-3d-layer';
 export {default as TerrainLayer} from './terrain-layer/terrain-layer';
 export {default as MVTLayer} from './mvt-layer/mvt-layer';
 export {default as TemporalGridLayer} from './temporalgrid-layer/temporalgrid-layer';
+export {default as AnimatedGridCellLayer} from './temporalgrid-layer/animated-grid-cell-layer';

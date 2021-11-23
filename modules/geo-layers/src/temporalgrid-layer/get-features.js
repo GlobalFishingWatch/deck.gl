@@ -60,6 +60,9 @@ export const getFeatures = (tile, { tileBBox }) => {
       tileBBox
     })
     feature.properties.data = cell.data
+    feature.properties.color = Array.from({ length: 3 }, () => 
+      Math.floor(Math.random() * 255)
+    );
     return feature
   })
 } 

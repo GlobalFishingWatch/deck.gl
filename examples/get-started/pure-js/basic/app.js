@@ -1,6 +1,6 @@
 import {Deck} from '@deck.gl/core';
 import {GeoJsonLayer, ArcLayer, BitmapLayer} from '@deck.gl/layers';
-import {TemporalGridLayer} from '@deck.gl/geo-layers';
+import {TemporalGridLayer, AnimatedGridCellLayer} from '@deck.gl/geo-layers';
 
 
 // source: Natural Earth http://www.naturalearthdata.com/ via geojson.xyz
@@ -21,6 +21,7 @@ export const deck = new Deck({
   initialViewState: INITIAL_VIEW_STATE,
   controller: true,
   layers: [
+  
     new TemporalGridLayer({
       // https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames#Tile_servers
       // data: 'https://dev-api-4wings-tiler-gee-poc-jzzp2ui3wq-uc.a.run.app/v1/4wings/tile/heatmap/{z}/{x}/{y}?date-range=2018-01-01T00:00:00.000Z,2019-04-11T23:59:59.000Z&datasets[0]=public-current-um-global4km&format=mvt&interval=day&temporal-aggregation=false',
@@ -42,6 +43,26 @@ export const deck = new Deck({
       //   });
       // }
     }),
+
+
+
+/*    new AnimatedGridCellLayer({
+      id: 'scatterplot-layer',
+      data: [{ coordinates: [0,40] }],
+      pickable: true,
+      opacity: 0.8,
+      stroked: true,
+      filled: true,
+      radiusScale: 6,
+      radiusMinPixels: 1,
+      radiusMaxPixels: 100,
+      lineWidthMinPixels: 1,
+      getPosition: d => d.coordinates,
+      getRadius: d => 100000,
+      getFillColor: d => [255, 140, 0],
+      getLineColor: d => [0, 0, 0]
+    }),
+    */
     new GeoJsonLayer({
       id: 'base-map',
       data: COUNTRIES,
