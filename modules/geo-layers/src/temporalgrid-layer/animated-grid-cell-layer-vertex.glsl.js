@@ -35,6 +35,7 @@ uniform float opacity;
 uniform float radiusScale;
 uniform float radiusMinPixels;
 uniform float radiusMaxPixels;
+uniform int frame;
 uniform float lineWidthScale;
 uniform float lineWidthMinPixels;
 uniform float lineWidthMaxPixels;
@@ -43,12 +44,15 @@ uniform bool filled;
 uniform bool billboard;
 uniform int radiusUnits;
 uniform int lineWidthUnits;
+// uniform float a[5] = float[](3.4, 4.2, 5.0, 5.2, 1.1);
+
 
 varying vec4 vFillColor;
 varying vec4 vLineColor;
 varying vec2 unitPosition;
 varying float innerUnitRadius;
 varying float outerRadiusPixels;
+// varying vec3 tmpColor;
 
 void main(void) {
   geometry.worldPosition = instancePositions;
@@ -88,8 +92,15 @@ void main(void) {
 
   DECKGL_FILTER_GL_POSITION(gl_Position, geometry);
 
+  // vec3[5] ramp = [255, 0, 0],[192, 0, 64],[128, 0, 128],[64, 0, 192],[0, 0, 255]
+  // vec3 ramp[5] = vec3[5](vec3(1.0, 0, 0), vec3(1.0, 0, 0), vec3(1.0, 0, 0), vec3(1.0, 0, 0), vec3(1.0, 0, 0));
+  // if (frame == 0) {
+  //   tmpColor = vec3(1.0, 0, 0);
+  // } else {
+  //   tmpColor = vec3(0, 0, 1.0);
+  // }
   // Apply opacity to instance color, or return instance picking color
-  vFillColor = vec4(instanceFillColors.rgb, instanceFillColors.a * opacity);
+  vFillColor = vec4(float(frame) / 20.0,0,0, instanceFillColors.a * opacity);
   DECKGL_FILTER_COLOR(vFillColor, geometry);
   vLineColor = vec4(instanceLineColors.rgb, instanceLineColors.a * opacity);
   DECKGL_FILTER_COLOR(vLineColor, geometry);

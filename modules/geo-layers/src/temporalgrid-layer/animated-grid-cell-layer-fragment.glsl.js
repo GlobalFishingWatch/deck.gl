@@ -45,20 +45,7 @@ void main(void) {
     discard;
   }
 
-  if (stroked > 0.5) {
-    float isLine = antialiasing ? 
-      smoothedge(innerUnitRadius * outerRadiusPixels, distToCenter) :
-      step(innerUnitRadius * outerRadiusPixels, distToCenter);
-
-    if (filled) {
-      gl_FragColor = mix(vFillColor, vLineColor, isLine);
-    } else {
-      if (isLine == 0.0) {
-        discard;
-      }
-      gl_FragColor = vec4(vLineColor.rgb, vLineColor.a * isLine);
-    }
-  } else if (filled) {
+  if (filled) {
     gl_FragColor = vFillColor;
   } else {
     discard;

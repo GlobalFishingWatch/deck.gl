@@ -32,6 +32,7 @@ const defaultProps = {
   radiusScale: {type: 'number', min: 0, value: 1},
   radiusMinPixels: {type: 'number', min: 0, value: 0}, //  min point radius in pixels
   radiusMaxPixels: {type: 'number', min: 0, value: Number.MAX_SAFE_INTEGER}, // max point radius in pixels
+  frame: {type: 'number', min: 0, value: 0},
 
   lineWidthUnits: 'meters',
   lineWidthScale: {type: 'number', min: 0, value: 1},
@@ -46,6 +47,7 @@ const defaultProps = {
   getPosition: {type: 'accessor', value: x => x.position},
   getRadius: {type: 'accessor', value: 1},
   getFillColor: {type: 'accessor', value: DEFAULT_COLOR},
+  getData: {type: 'accessor', value: [255, 0, 255]},
   getLineColor: {type: 'accessor', value: DEFAULT_COLOR},
   getLineWidth: {type: 'accessor', value: 1},
 
@@ -74,6 +76,12 @@ export default class AnimatedGridCellLayer extends Layer {
         transition: true,
         accessor: 'getRadius',
         defaultValue: 1
+      },
+      instanceData: {
+        size: 5,
+        transition: true,
+        accessor: 'getData',
+        // defaultValue: [[255, 0, 255]]
       },
       instanceFillColors: {
         size: this.props.colorFormat.length,
@@ -123,7 +131,8 @@ export default class AnimatedGridCellLayer extends Layer {
       lineWidthUnits,
       lineWidthScale,
       lineWidthMinPixels,
-      lineWidthMaxPixels
+      lineWidthMaxPixels,
+      frame
     } = this.props;
 
     this.state.model
@@ -140,7 +149,8 @@ export default class AnimatedGridCellLayer extends Layer {
         lineWidthUnits: UNIT[lineWidthUnits],
         lineWidthScale,
         lineWidthMinPixels,
-        lineWidthMaxPixels
+        lineWidthMaxPixels,
+        frame
       })
       .draw();
   }

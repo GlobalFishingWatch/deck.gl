@@ -14,7 +14,6 @@ const decodeProto = data => {
 };
 
 const parseTemporalgrid = (arraybuffer, options) => {
-  console.log(options)
   const int16ArrayBuffer = decodeProto(arraybuffer);
   const cells = getCells(int16ArrayBuffer, /* TODO */ 1)
   return cells

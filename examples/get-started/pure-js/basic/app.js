@@ -17,67 +17,46 @@ const INITIAL_VIEW_STATE = {
   pitch: 30
 };
 
+let frame = 0
+
+const temporalConfig = {
+  // https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames#Tile_servers
+  // data: 'https://dev-api-4wings-tiler-gee-poc-jzzp2ui3wq-uc.a.run.app/v1/4wings/tile/heatmap/{z}/{x}/{y}?date-range=2018-01-01T00:00:00.000Z,2019-04-11T23:59:59.000Z&datasets[0]=public-current-um-global4km&format=mvt&interval=day&temporal-aggregation=false',
+  data: 'https://gateway.api.dev.globalfishingwatch.org/v1/4wings/tile/heatmap/{z}/{x}/{y}?proxy=true&format=intArray&temporal-aggregation=false&interval=10days&datasets[0]=public-global-fishing-effort:v20201001&',
+  
+  minZoom: 0,
+  maxZoom: 19,
+  tileSize: 512,
+  frame: 0,
+}
+
+const basemap = new GeoJsonLayer({
+    id: 'base-map',
+    data: COUNTRIES,
+    // Styles
+    stroked: true,
+    filled: true,
+    lineWidthMinPixels: 2,
+    opacity: 0.4,
+    getLineColor: [60, 60, 60],
+    getFillColor: [200, 200, 200]
+  })
+
 export const deck = new Deck({
   initialViewState: INITIAL_VIEW_STATE,
   controller: true,
-  layers: [
-  
-    new TemporalGridLayer({
-      // https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames#Tile_servers
-      // data: 'https://dev-api-4wings-tiler-gee-poc-jzzp2ui3wq-uc.a.run.app/v1/4wings/tile/heatmap/{z}/{x}/{y}?date-range=2018-01-01T00:00:00.000Z,2019-04-11T23:59:59.000Z&datasets[0]=public-current-um-global4km&format=mvt&interval=day&temporal-aggregation=false',
-      data: 'https://gateway.api.dev.globalfishingwatch.org/v1/4wings/tile/heatmap/{z}/{x}/{y}?proxy=true&format=intArray&temporal-aggregation=false&interval=10days&datasets[0]=public-global-fishing-effort:v20201001&',
-    
-      minZoom: 0,
-      maxZoom: 19,
-      tileSize: 512,
-    
-      // renderSubLayers: props => {
-      //   const {
-      //     bbox: {west, south, east, north}
-      //   } = props.tile;
-    
-      //   return new BitmapLayer(props, {
-      //     data: null,
-      //     image: props.data,
-      //     bounds: [west, south, east, north]
-      //   });
-      // }
-    }),
-
-
-
-/*    new AnimatedGridCellLayer({
-      id: 'scatterplot-layer',
-      data: [{ coordinates: [0,40] }],
-      pickable: true,
-      opacity: 0.8,
-      stroked: true,
-      filled: true,
-      radiusScale: 6,
-      radiusMinPixels: 1,
-      radiusMaxPixels: 100,
-      lineWidthMinPixels: 1,
-      getPosition: d => d.coordinates,
-      getRadius: d => 100000,
-      getFillColor: d => [255, 140, 0],
-      getLineColor: d => [0, 0, 0]
-    }),
-    */
-    new GeoJsonLayer({
-      id: 'base-map',
-      data: COUNTRIES,
-      // Styles
-      stroked: true,
-      filled: true,
-      lineWidthMinPixels: 2,
-      opacity: 0.4,
-      getLineColor: [60, 60, 60],
-      getFillColor: [200, 200, 200]
-    }),
-
-  ]
 });
+
+const update = () => {
+  deck.setProps({layers: [new TemporalGridLayer({...temporalConfig, frame}), basemap]})
+}
+
 
 // For automated test cases
 /* global document */
 document.body.style.margin = '0px';
+
+window.setInterval(() => {
+  update()
+  frame++
+}, 16)

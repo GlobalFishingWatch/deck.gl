@@ -63,6 +63,7 @@ export const getFeatures = (tile, { tileBBox }) => {
     feature.properties.color = Array.from({ length: 3 }, () => 
       Math.floor(Math.random() * 255)
     );
+    feature.properties.testData = [[255, 0, 0],[192, 0, 64],[128, 0, 128],[64, 0, 192],[0, 0, 255]]
     return feature
   })
 } 

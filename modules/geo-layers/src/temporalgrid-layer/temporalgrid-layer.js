@@ -8,6 +8,7 @@ import AnimatedGridCellLayer from './animated-grid-cell-layer';
 
 const defaultProps = {
   loaders: [TemporalGridLoader],
+  frame: 0
   // binary: true
 };
 
@@ -26,25 +27,28 @@ export default class TemporalGridLayer extends TileLayer {
   }
 
   renderSubLayers(props) {
+    const { frame } = this.props
     const {
       x, y, z,
       bbox: {west, south, east, north}
     } = props.tile;
     
     const features = getFeatures(props.data, { tileBBox: [west, south, east, north] })
-    console.log(features)
+    // console.log(features)
 
     return new AnimatedGridCellLayer({
-      id: 'scatterplot-layer',
+      id: `temporalgrid-${x}-${y}-${z}`,
       data: features,
+      frame,
       pickable: true,
       filled: true,
-      radiusScale: 5,
+      radiusScale: 4,
       // radiusMinPixels: 1,
       // radiusMaxPixels: 100,
       getPosition: d => d.geometry.coordinates[0][0],
       getRadius: d => 2000,
       getFillColor: d => d.properties.color,
+      getData: d => d.properties.testData,
       getLineColor: d => [0, 0, 0]
     })
 
