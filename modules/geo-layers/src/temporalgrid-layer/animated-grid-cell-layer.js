@@ -80,7 +80,7 @@ export default class AnimatedGridCellLayer extends Layer {
       instanceData: {
         size: 5,
         transition: true,
-        accessor: 'getData',
+        accessor: 'getData'
         // defaultValue: [[255, 0, 255]]
       },
       instanceFillColors: {

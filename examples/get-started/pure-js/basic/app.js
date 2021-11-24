@@ -1,13 +1,10 @@
 import {Deck} from '@deck.gl/core';
-import {GeoJsonLayer, ArcLayer, BitmapLayer} from '@deck.gl/layers';
-import {TemporalGridLayer, AnimatedGridCellLayer} from '@deck.gl/geo-layers';
-
+import {GeoJsonLayer} from '@deck.gl/layers';
+import {TemporalGridLayer} from '@deck.gl/geo-layers';
 
 // source: Natural Earth http://www.naturalearthdata.com/ via geojson.xyz
 const COUNTRIES =
-  'https://d2ad6b4ur7yvpq.cloudfront.net/naturalearth-3.3.0/ne_50m_admin_0_scale_rank.geojson'; //eslint-disable-line
-const AIR_PORTS =
-  'https://d2ad6b4ur7yvpq.cloudfront.net/naturalearth-3.3.0/ne_10m_airports.geojson';
+  'https://d2ad6b4ur7yvpq.cloudfront.net/naturalearth-3.3.0/ne_50m_admin_0_scale_rank.geojson';
 
 const INITIAL_VIEW_STATE = {
   latitude: 51.47,
@@ -17,46 +14,47 @@ const INITIAL_VIEW_STATE = {
   pitch: 30
 };
 
-let frame = 0
+let frame = 0;
 
 const temporalConfig = {
   // https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames#Tile_servers
   // data: 'https://dev-api-4wings-tiler-gee-poc-jzzp2ui3wq-uc.a.run.app/v1/4wings/tile/heatmap/{z}/{x}/{y}?date-range=2018-01-01T00:00:00.000Z,2019-04-11T23:59:59.000Z&datasets[0]=public-current-um-global4km&format=mvt&interval=day&temporal-aggregation=false',
-  data: 'https://gateway.api.dev.globalfishingwatch.org/v1/4wings/tile/heatmap/{z}/{x}/{y}?proxy=true&format=intArray&temporal-aggregation=false&interval=10days&datasets[0]=public-global-fishing-effort:v20201001&',
-  
+  data:
+    'https://gateway.api.dev.globalfishingwatch.org/v1/4wings/tile/heatmap/{z}/{x}/{y}?proxy=true&format=intArray&temporal-aggregation=false&interval=10days&datasets[0]=public-global-fishing-effort:v20201001&',
+
   minZoom: 0,
   maxZoom: 19,
   tileSize: 512,
-  frame: 0,
-}
+  frame: 0
+};
 
 const basemap = new GeoJsonLayer({
-    id: 'base-map',
-    data: COUNTRIES,
-    // Styles
-    stroked: true,
-    filled: true,
-    lineWidthMinPixels: 2,
-    opacity: 0.4,
-    getLineColor: [60, 60, 60],
-    getFillColor: [200, 200, 200]
-  })
+  id: 'base-map',
+  data: COUNTRIES,
+  // Styles
+  stroked: true,
+  filled: true,
+  lineWidthMinPixels: 2,
+  opacity: 0.4,
+  getLineColor: [60, 60, 60],
+  getFillColor: [200, 200, 200]
+});
 
 export const deck = new Deck({
   initialViewState: INITIAL_VIEW_STATE,
-  controller: true,
+  controller: true
 });
 
 const update = () => {
-  deck.setProps({layers: [new TemporalGridLayer({...temporalConfig, frame}), basemap]})
-}
-
+  deck.setProps({layers: [new TemporalGridLayer({...temporalConfig, frame}), basemap]});
+};
 
 // For automated test cases
 /* global document */
 document.body.style.margin = '0px';
 
+// eslint-disable-next-line no-undef
 window.setInterval(() => {
-  update()
-  frame++
-}, 16)
+  update();
+  frame++;
+}, 16);
