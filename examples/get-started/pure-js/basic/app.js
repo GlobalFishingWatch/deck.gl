@@ -45,13 +45,22 @@ export const deck = new Deck({
   controller: true
 });
 
+const temporalGridLayer = new TemporalGridLayer({ ...temporalConfig, frame })
+const deckProps = {layers: [temporalGridLayer, basemap]}
 const update = () => {
-  deck.setProps({layers: [new TemporalGridLayer({...temporalConfig, frame}), basemap]});
+  deck.setProps(deckProps);
 };
 
 // For automated test cases
 /* global document */
 document.body.style.margin = '0px';
+
+const onButtonClick = () => {
+  // eslint-disable-next-line
+  console.info(temporalGridLayer.getViewportData());
+};
+const button = document.getElementById('get-data');
+button.addEventListener('click', onButtonClick);
 
 // eslint-disable-next-line no-undef
 window.setInterval(() => {

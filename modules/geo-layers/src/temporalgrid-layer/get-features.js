@@ -50,6 +50,7 @@ const getFeature = featureParams => {
   return getRectangleFeature(featureParams);
 };
 
+// TODO review if tileBBox is still needed here
 export const getFeatures = (tile, {tileBBox}) => {
   return tile.cells.map(cell => {
     const feature = getFeature({

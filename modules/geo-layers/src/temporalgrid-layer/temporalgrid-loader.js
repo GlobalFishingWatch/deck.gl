@@ -1,5 +1,6 @@
 import Protobuf from 'pbf';
 import {getCells} from './get-cells';
+import { tileToBoundingBox } from '../tile-layer/utils'
 
 const decodeProto = data => {
   const readField = (tag, obj, pbf) => {
@@ -14,8 +15,15 @@ const decodeProto = data => {
 };
 
 const parseTemporalgrid = (arraybuffer, options) => {
+  const url = options.baseUri;
+  const [z, x, y] = url
+    .slice(url.length - 5, url.length)
+    .split('/')
+    .map(coordinate => parseInt(coordinate, 10));
+
+  const bbox = tileToBoundingBox({ isGeospatial: true }, x, y, z);
   const int16ArrayBuffer = decodeProto(arraybuffer);
-  const cells = getCells(int16ArrayBuffer, /* TODO */ 1);
+  const cells = getCells(bbox, int16ArrayBuffer, /* TODO */ 1);
   return cells;
 };
 
