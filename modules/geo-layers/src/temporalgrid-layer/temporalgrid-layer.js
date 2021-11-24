@@ -10,6 +10,10 @@ const defaultProps = {
   // binary: true
 };
 
+function inBBox(pt, bbox) {
+  return bbox[0] <= pt[0] && bbox[1] <= pt[1] && bbox[2] >= pt[0] && bbox[3] >= pt[1];
+}
+
 export default class TemporalGridLayer extends TileLayer {
   getTileData(tile) {
     const {data, fetch} = this.props;
@@ -21,6 +25,24 @@ export default class TemporalGridLayer extends TileLayer {
       return fetch(tile.url, {propName: 'data', layer: this, signal});
     }
     return null;
+  }
+
+  get isLoaded() {
+    return super.isLoaded;
+  }
+
+  getViewportData() {
+    if (this.isLoaded) {
+      const bounds = this.context.viewport.getBounds();
+      const {tileset} = this.state;
+      const totalCells = tileset.selectedTiles.flatMap(tile => tile.content.cells).length;
+      console.log(`totalCells: ${totalCells}`);
+      const filteredCells = tileset.selectedTiles.flatMap(tile =>
+        tile.content.cells.filter(cell => inBBox(cell.coords, bounds))
+      );
+      console.log(`filteredCells: ${filteredCells.length}`);
+      return filteredCells;
+    }
   }
 
   renderSubLayers(props) {
