@@ -9,9 +9,9 @@ const COUNTRIES =
 const INITIAL_VIEW_STATE = {
   latitude: 51.47,
   longitude: 0.45,
-  zoom: 4,
+  zoom: 1.5,
   bearing: 0,
-  pitch: 30
+  pitch: 0
 };
 
 let frame = 0;
