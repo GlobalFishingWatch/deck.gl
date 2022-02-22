@@ -1,6 +1,7 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import {render} from 'react-dom';
 import DeckGL, {GeoJsonLayer, BitmapLayer, SpriteLayer} from 'deck.gl';
+import GL from '@luma.gl/constants';
 import tilebelt from 'tilebelt';
 
 // Test tile
@@ -20,7 +21,6 @@ const INITIAL_VIEW_STATE = {
 
 const bounds =  tilebelt.tileToBBOX([1,1,2])
 const bounds2 =  tilebelt.tileToBBOX([1,2,2])
-
 const LOOP_LENGTH = 18
 
 const CONTROL_PANEL_STYLE = {
@@ -72,9 +72,6 @@ function Root() {
                 id="bitmap-layer"
                 bounds={bounds2}
                 image="mummy.png"
-                animationCurrentFrame={time}
-                animationNumCols={5}
-                animationNumRows={5}
                 />
             <SpriteLayer
                 id="sprite-layer"
@@ -83,6 +80,10 @@ function Root() {
                 animationCurrentFrame={time}
                 animationNumCols={5}
                 animationNumRows={5}
+                textureParameters={{
+                  [GL.TEXTURE_MIN_FILTER]: GL.NEAREST,
+                  [GL.TEXTURE_MAG_FILTER]: GL.NEAREST
+                }}
                 />
         </DeckGL>
         <div style={CONTROL_PANEL_STYLE}>
