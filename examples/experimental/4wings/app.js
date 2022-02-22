@@ -2,7 +2,6 @@ import React, { Fragment, useEffect, useState } from 'react';
 import {render} from 'react-dom';
 import DeckGL, {GeoJsonLayer} from 'deck.gl';
 import {FourwingsLayer} from '@deck.gl/geo-layers';
-// import { Texture2D } from '@luma.gl/core';
 import tilebelt from 'tilebelt';
 
 // Test tile
@@ -20,9 +19,9 @@ const INITIAL_VIEW_STATE = {
   pitch: 0
 };
 
-const bounds =  tilebelt.tileToBBOX([1,1,2])
-const bounds2 =  tilebelt.tileToBBOX([1,2,2])
-const LOOP_LENGTH = 18
+// const bounds =  tilebelt.tileToBBOX([1,1,2])
+// const bounds2 =  tilebelt.tileToBBOX([1,2,2])
+const LOOP_LENGTH = 4
 
 const CONTROL_PANEL_STYLE = {
   position: 'fixed',
@@ -32,23 +31,6 @@ const CONTROL_PANEL_STYLE = {
   fontSize: 13,
   background: '#fff'
 };
-
-// const texture = new Texture2D(gl, {
-//   width: 2,
-//   height: 1,
-//   format: GL.RGB,
-//   data: new Uint8Array([255, 0, 0, 0, 0, 255]),
-//   parameters: {
-//     [GL.TEXTURE_MAG_FILTER]: GL.NEAREST,
-//     [GL.TEXTURE_MIN_FILTER]: GL.NEAREST
-//   },
-//   pixelStore: {
-//     [GL.UNPACK_FLIP_Y_WEBGL]: true
-//   },
-//   mipmaps: true
-// });
-
-
 
 function Root() {
 //   const onClick = info => {
@@ -93,6 +75,7 @@ function Root() {
         </DeckGL>
         <div style={CONTROL_PANEL_STYLE}>
             <button onClick={() => setPaused(!paused)}>play/pause</button>
+            {time}
         </div>
       </Fragment>
   );

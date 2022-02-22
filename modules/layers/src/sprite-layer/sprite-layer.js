@@ -48,7 +48,7 @@ vTexCoord = vec2((animationCol + texCoords.x) * (animationNumColsRatio), (animat
   draw(params) {
     const {animationCurrentFrame, animationNumCols, animationNumRows} = this.props;
 
-    const animationCol = animationCurrentFrame % animationNumRows;
+    const animationCol = animationCurrentFrame % animationNumCols;
     const animationRow = Math.floor(animationCurrentFrame / animationNumCols);
 
     params.uniforms = {
