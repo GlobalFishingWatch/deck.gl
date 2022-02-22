@@ -1,7 +1,8 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import {render} from 'react-dom';
-import DeckGL, {GeoJsonLayer, BitmapLayer, SpriteLayer} from 'deck.gl';
-import GL from '@luma.gl/constants';
+import DeckGL, {GeoJsonLayer} from 'deck.gl';
+import {FourwingsLayer} from '@deck.gl/geo-layers';
+// import { Texture2D } from '@luma.gl/core';
 import tilebelt from 'tilebelt';
 
 // Test tile
@@ -24,13 +25,30 @@ const bounds2 =  tilebelt.tileToBBOX([1,2,2])
 const LOOP_LENGTH = 18
 
 const CONTROL_PANEL_STYLE = {
-    position: 'fixed',
-    top: 20,
-    left: 20,
-    padding: 20,
-    fontSize: 13,
-    background: '#fff'
-  };
+  position: 'fixed',
+  top: 20,
+  left: 20,
+  padding: 20,
+  fontSize: 13,
+  background: '#fff'
+};
+
+// const texture = new Texture2D(gl, {
+//   width: 2,
+//   height: 1,
+//   format: GL.RGB,
+//   data: new Uint8Array([255, 0, 0, 0, 0, 255]),
+//   parameters: {
+//     [GL.TEXTURE_MAG_FILTER]: GL.NEAREST,
+//     [GL.TEXTURE_MIN_FILTER]: GL.NEAREST
+//   },
+//   pixelStore: {
+//     [GL.UNPACK_FLIP_Y_WEBGL]: true
+//   },
+//   mipmaps: true
+// });
+
+
 
 function Root() {
 //   const onClick = info => {
@@ -68,23 +86,10 @@ function Root() {
                 getLineColor={[60, 60, 60]}
                 getFillColor={[200, 200, 200]}
             />
-            <BitmapLayer
-                id="bitmap-layer"
-                bounds={bounds2}
-                image="mummy.png"
-                />
-            <SpriteLayer
-                id="sprite-layer"
-                bounds={bounds}
-                image="mummy.png"
-                animationCurrentFrame={time}
-                animationNumCols={5}
-                animationNumRows={5}
-                textureParameters={{
-                  [GL.TEXTURE_MIN_FILTER]: GL.NEAREST,
-                  [GL.TEXTURE_MAG_FILTER]: GL.NEAREST
-                }}
-                />
+            <FourwingsLayer
+              id="fourwings-layer"
+              animationCurrentFrame={time}
+            />
         </DeckGL>
         <div style={CONTROL_PANEL_STYLE}>
             <button onClick={() => setPaused(!paused)}>play/pause</button>
